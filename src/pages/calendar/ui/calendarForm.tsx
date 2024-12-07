@@ -1,39 +1,70 @@
 import Calendar from "react-calendar";
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Input,
-  Text,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
-} from "@chakra-ui/react";
+import { Box, Button, Text, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@chakra-ui/react";
+import EventForm from "./eventForm";
+import EventList from "./eventList";
+import 'react-calendar/dist/Calendar.css'; // 기본 스타일 가져오기
+
+type EventDetails = {
+  companyName: string;
+  interviewType: string;
+  location: string;
+  dateTime: string;
+  position: string;
+};
 
 type Events = {
-  [date: string]: string[]; // 날짜별로 이벤트 배열을 저장
+  [date: string]: EventDetails[];
 };
 
 const CalendarForm = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [events, setEvents] = useState<Events>({});
-  const [newEvent, setNewEvent] = useState<string>("");
+  const [newEvent, setNewEvent] = useState<EventDetails>({
+    companyName: "",
+    interviewType: "",
+    location: "",
+    dateTime: "",
+    position: "",
+  });
 
-  // 일정 추가 함수
   const handleAddEvent = () => {
-    if (!newEvent.trim() || !selectedDate) return; // 빈 입력값 및 선택된 날짜가 없는 경우 방지
+    if (!selectedDate) return;
 
-    const dateKey = selectedDate.toDateString(); // 키로 사용할 날짜 문자열
+    const dateKey = selectedDate.toDateString();
     setEvents((prev) => ({
       ...prev,
       [dateKey]: [...(prev[dateKey] || []), newEvent],
     }));
-    setNewEvent(""); // 입력값 초기화
+
+    setNewEvent({
+      companyName: "",
+      interviewType: "",
+      location: "",
+      dateTime: "",
+      position: "",
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewEvent((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleDeleteEvent = (index: number) => {
+    if (!selectedDate) return;
+
+    const dateKey = selectedDate.toDateString();
+    const updatedEvents = [...(events[dateKey] || [])];
+    updatedEvents.splice(index, 1); // 이벤트 삭제
+
+    setEvents((prev) => ({
+      ...prev,
+      [dateKey]: updatedEvents,
+    }));
   };
 
   return (
@@ -41,17 +72,18 @@ const CalendarForm = () => {
       <Calendar
         onChange={(value) => {
           if (value instanceof Date) {
-            setSelectedDate(value); // 단일 날짜만 처리
+            setSelectedDate(value);
           } else if (Array.isArray(value)) {
-            setSelectedDate(value[0]); // 범위 선택 시 시작 날짜만 처리
+            setSelectedDate(value[0]);
           } else {
-            setSelectedDate(null); // 선택이 해제되었을 때
+            setSelectedDate(null);
           }
         }}
         value={selectedDate}
+        className="react-calendar-custom" // 커스텀 클래스명 추가
+        tileClassName="react-calendar-tile" // 날짜 타일 커스터마이즈
+        minDetail="month" // 최소한 월 단위로만 보기
       />
-
-      {/* Dialog 사용 */}
       <DialogRoot>
         <DialogTrigger asChild>
           <Button mt={4} colorScheme="blue">
@@ -63,37 +95,28 @@ const CalendarForm = () => {
             <DialogTitle>일정 추가</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Input
-              placeholder="Event description"
-              value={newEvent}
-              onChange={(e) => setNewEvent(e.target.value)}
+            <EventForm
+              newEvent={newEvent}
+              onChange={handleInputChange}
+              onAdd={handleAddEvent}
             />
           </DialogBody>
           <DialogFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleAddEvent}>
-              저장
-            </Button>
-            <DialogCloseTrigger>
-              <Button variant="ghost">취소</Button>
-            </DialogCloseTrigger>
+            <DialogTrigger>
+              <Button variant="ghost">X</Button>
+            </DialogTrigger>
           </DialogFooter>
         </DialogContent>
       </DialogRoot>
 
-      {/* 선택된 날짜의 이벤트 표시 */}
       <Box mt={6}>
         <Text fontSize="lg">
-          {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의 면접:
+          {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의 일정:
         </Text>
-        <Box mt={2}>
-          {(selectedDate && events[selectedDate.toDateString()] || []).map(
-            (event, index) => (
-              <Text key={index} fontSize="md">
-                - {event}
-              </Text>
-            )
-          )}
-        </Box>
+        <EventList
+          events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
+          onDelete={handleDeleteEvent} // 삭제 핸들러 전달
+        />
       </Box>
     </Box>
   );

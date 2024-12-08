@@ -52,7 +52,7 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         onChange={onChange}
         mb={2}
       />
-      <Button colorScheme="blue" onClick={onAdd}>
+      <Button background="green" onClick={onAdd}>
         저장
       </Button>
     </Box>

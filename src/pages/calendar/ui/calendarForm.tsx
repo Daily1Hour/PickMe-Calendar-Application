@@ -27,6 +27,7 @@ const CalendarForm = () => {
     dateTime: "",
     position: "",
   });
+  
 
   const handleAddEvent = () => {
     if (!selectedDate) return;
@@ -67,6 +68,19 @@ const CalendarForm = () => {
     }));
   };
 
+  const handleUpdateEvent = (index: number, updatedEvent: EventDetails) => {
+    if (!selectedDate) return;
+
+    const dateKey = selectedDate.toDateString();
+    const updatedEvents = [...(events[dateKey] || [])];
+    updatedEvents[index] = updatedEvent;
+
+    setEvents((prev) => ({
+      ...prev,
+      [dateKey]: updatedEvents,
+    }));
+  };
+
   return (
     <Box maxW="600px" mx="auto" mt={10} p={4} borderWidth="1px" borderRadius="lg">
       <Calendar
@@ -82,11 +96,15 @@ const CalendarForm = () => {
         value={selectedDate}
         className="react-calendar-custom" // 커스텀 클래스명 추가
         tileClassName="react-calendar-tile" // 날짜 타일 커스터마이즈
-        minDetail="month" // 최소한 월 단위로만 보기
+        calendarType="gregory" 
+        minDetail="month"
+        prev2Label={null}
+        next2Label={null}
+        showNeighboringMonth={false}
       />
       <DialogRoot>
         <DialogTrigger asChild>
-          <Button mt={4} colorScheme="blue">
+          <Button mt={4} background="green">
             일정 추가
           </Button>
         </DialogTrigger>
@@ -115,7 +133,8 @@ const CalendarForm = () => {
         </Text>
         <EventList
           events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
-          onDelete={handleDeleteEvent} // 삭제 핸들러 전달
+          onDelete={handleDeleteEvent} 
+          onUpdate={handleUpdateEvent}
         />
       </Box>
     </Box>

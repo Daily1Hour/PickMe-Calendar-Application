@@ -1,11 +1,10 @@
-import Calendar from "react-calendar";
 import { useState } from "react";
-import { Box, Button, Text, DialogBody, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger } from "@chakra-ui/react";
-import EventForm from "./eventForm";
-import EventList from "./eventList";
-import 'react-calendar/dist/Calendar.css'; // 기본 스타일 가져오기
+import { Box } from "@chakra-ui/react";
+import CalendarWrapper from "./calendarWrap";
+import EventDialog from "./eventDialog";
+import EventManager from "./eventManager";
 
-type EventDetails = {
+export type EventDetails = {
   companyName: string;
   interviewType: string;
   location: string;
@@ -13,7 +12,7 @@ type EventDetails = {
   position: string;
 };
 
-type Events = {
+export type Events = {
   [date: string]: EventDetails[];
 };
 
@@ -27,7 +26,6 @@ const CalendarForm = () => {
     dateTime: "",
     position: "",
   });
-  
 
   const handleAddEvent = () => {
     if (!selectedDate) return;
@@ -60,7 +58,7 @@ const CalendarForm = () => {
 
     const dateKey = selectedDate.toDateString();
     const updatedEvents = [...(events[dateKey] || [])];
-    updatedEvents.splice(index, 1); // 이벤트 삭제
+    updatedEvents.splice(index, 1);
 
     setEvents((prev) => ({
       ...prev,
@@ -83,60 +81,18 @@ const CalendarForm = () => {
 
   return (
     <Box maxW="600px" mx="auto" mt={10} p={4} borderWidth="1px" borderRadius="lg">
-      <Calendar
-        onChange={(value) => {
-          if (value instanceof Date) {
-            setSelectedDate(value);
-          } else if (Array.isArray(value)) {
-            setSelectedDate(value[0]);
-          } else {
-            setSelectedDate(null);
-          }
-        }}
-        value={selectedDate}
-        className="react-calendar-custom" // 커스텀 클래스명 추가
-        tileClassName="react-calendar-tile" // 날짜 타일 커스터마이즈
-        calendarType="gregory" 
-        minDetail="month"
-        prev2Label={null}
-        next2Label={null}
-        showNeighboringMonth={false}
+      <CalendarWrapper selectedDate={selectedDate} onDateChange={setSelectedDate} events={events} />
+      <EventDialog
+        newEvent={newEvent}
+        onChange={handleInputChange}
+        onAdd={handleAddEvent}
       />
-      <DialogRoot>
-        <DialogTrigger asChild>
-          <Button mt={4} background="green">
-            일정 추가
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>일정 추가</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <EventForm
-              newEvent={newEvent}
-              onChange={handleInputChange}
-              onAdd={handleAddEvent}
-            />
-          </DialogBody>
-          <DialogFooter>
-            <DialogTrigger>
-              <Button variant="ghost">X</Button>
-            </DialogTrigger>
-          </DialogFooter>
-        </DialogContent>
-      </DialogRoot>
-
-      <Box mt={6}>
-        <Text fontSize="lg">
-          {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의 일정:
-        </Text>
-        <EventList
-          events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
-          onDelete={handleDeleteEvent} 
-          onUpdate={handleUpdateEvent}
-        />
-      </Box>
+      <EventManager
+        events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
+        onDelete={handleDeleteEvent}
+        onUpdate={handleUpdateEvent}
+        selectedDate={selectedDate}
+      />
     </Box>
   );
 };

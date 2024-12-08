@@ -1,13 +1,7 @@
-import { Box, Text, Button, Input, Flex } from "@chakra-ui/react";
+import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
-
-type EventDetails = {
-  companyName: string;
-  interviewType: string;
-  location: string;
-  dateTime: string;
-  position: string;
-};
+import EventInputField from "./eventInputField";
+import { EventDetails } from "./calendarForm";
 
 type EventListProps = {
   events: EventDetails[];
@@ -21,13 +15,13 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
 
   const handleEditClick = (index: number) => {
     setEditIndex(index);
-    setEditEvent(events[index]); // 선택된 이벤트를 수정 상태로
+    setEditEvent(events[index]);
   };
 
   const handleSaveClick = () => {
     if (editIndex !== null && editEvent) {
       onUpdate(editIndex, editEvent);
-      setEditIndex(null); // 수정 상태 초기화
+      setEditIndex(null);
       setEditEvent(null);
     }
   };
@@ -49,38 +43,40 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
         <Box key={index} mt={4} p={2} borderWidth="1px" borderRadius="md">
           {editIndex === index ? (
             <Flex direction="column" gap={2}>
-              <Input
+              <EventInputField
                 placeholder="회사명"
                 name="companyName"
                 value={editEvent?.companyName || ""}
                 onChange={handleInputChange}
               />
-              <Input
+              <EventInputField
                 placeholder="면접 유형"
                 name="interviewType"
                 value={editEvent?.interviewType || ""}
                 onChange={handleInputChange}
               />
-              <Input
+              <EventInputField
                 placeholder="면접 장소"
                 name="location"
                 value={editEvent?.location || ""}
                 onChange={handleInputChange}
               />
-              <Input
+              <EventInputField
                 placeholder="면접 날짜/시간"
                 name="dateTime"
                 value={editEvent?.dateTime || ""}
                 onChange={handleInputChange}
               />
-              <Input
+              <EventInputField
                 placeholder="지원 직무"
                 name="position"
                 value={editEvent?.position || ""}
                 onChange={handleInputChange}
               />
               <Flex gap={2} mt={2}>
-                <Button background="green" onClick={handleSaveClick}>저장</Button>
+                <Button background="green" onClick={handleSaveClick}>
+                  저장
+                </Button>
                 <Button onClick={() => setEditIndex(null)}>취소</Button>
               </Flex>
             </Flex>
@@ -95,7 +91,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
                 <Button background="green" onClick={() => handleEditClick(index)}>
                   수정
                 </Button>
-                <Button colorScheme="black" onClick={() => onDelete(index)}>
+                <Button colorScheme="red" onClick={() => onDelete(index)}>
                   삭제
                 </Button>
               </Flex>

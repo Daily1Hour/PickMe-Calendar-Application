@@ -1,8 +1,35 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
 import { Box } from "@chakra-ui/react";
+import styled from "styled-components";
 
+export const StyledCalendar = styled(Calendar)`
+  &.react-calendar-custom {
+    border: 1px solid #ccc;
+    padding: 10px;
 
+    .react-calendar__tile {
+      text-align: center;
+      transition: background-color 0.3s ease;
+      height: 45px;
+
+      &:hover {
+        background-color: #009A6E;
+      }
+    }
+
+    .react-calendar__tile--now {
+      background: grey !important; /* 오늘 날짜 강조 */
+    }
+
+    .highlight-tile {
+      background-color: #90ee90 !important; /* 일정 있는 날짜 강조 */
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+    }
+  }
+`;
 
 type EventDetails = {
   companyName: string;
@@ -31,7 +58,7 @@ const CalendarWrapper = ({ selectedDate, onDateChange, events }: CalendarWrapper
 
   return (
     <Box placeItems="center">
-      <Calendar
+      <StyledCalendar
         onChange={(value) => {
           if (value instanceof Date) {
             onDateChange(value);

@@ -42,6 +42,12 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         value={newEvent.position}
         onChange={onChange}
       />
+      <EventInputField
+        placeholder="메모"
+        name="description"
+        value={newEvent.description}
+        onChange={onChange}
+      />
       <Button background="green" onClick={onAdd}>
         저장
       </Button>

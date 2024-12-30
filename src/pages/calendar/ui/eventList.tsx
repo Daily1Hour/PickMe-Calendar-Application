@@ -73,6 +73,12 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
                 value={editEvent?.position || ""}
                 onChange={handleInputChange}
               />
+              <EventInputField 
+                placeholder="메모"
+                name = "description"
+                value={editEvent?.description || ""}
+                onChange={handleInputChange}
+              />
               <Flex gap={2} mt={2}>
                 <Button background="green" onClick={handleSaveClick}>
                   저장

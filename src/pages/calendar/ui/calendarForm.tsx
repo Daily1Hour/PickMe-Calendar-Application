@@ -10,6 +10,7 @@ export type EventDetails = {
   location: string;
   dateTime: string;
   position: string;
+  description: string;
 };
 
 export type Events = {
@@ -25,6 +26,7 @@ const CalendarForm = () => {
     location: "",
     dateTime: "",
     position: "",
+    description: ""
   });
 
   const handleAddEvent = () => {
@@ -42,6 +44,7 @@ const CalendarForm = () => {
       location: "",
       dateTime: "",
       position: "",
+      description: ""
     });
   };
 

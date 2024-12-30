@@ -37,6 +37,7 @@ type EventDetails = {
   location: string;
   dateTime: string;
   position: string;
+  description: string;
 };
 
 type Events = {

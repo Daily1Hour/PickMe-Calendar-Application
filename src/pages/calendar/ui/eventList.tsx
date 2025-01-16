@@ -16,7 +16,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
   const handleEditClick = (index: number) => {
     setEditIndex(index);
     setEditEvent(events[index]);
-  };
+  }; // 수정 버튼 클릭 시 해당 이벤트의 인덱스와 정보를 상태에 저장
 
   const handleSaveClick = () => {
     if (editIndex !== null && editEvent) {
@@ -24,17 +24,17 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
       setEditIndex(null);
       setEditEvent(null);
     }
-  };
+  };// 저장 버튼 클릭 시 수정된 정보를 상태에 저장하고 인덱스 초기화
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (editEvent) {
       setEditEvent({ ...editEvent, [name]: value });
     }
-  };
+  };// input 값이 변경될 때마다 상태에 저장
 
   if (events.length === 0) {
-    return <Text>No events for this date.</Text>;
+    return <Text>일정이 없습니다.</Text>;
   }
 
   return (

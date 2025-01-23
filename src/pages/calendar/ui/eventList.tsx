@@ -24,14 +24,14 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
       setEditIndex(null);
       setEditEvent(null);
     }
-  };// 저장 버튼 클릭 시 수정된 정보를 상태에 저장하고 인덱스 초기화
+  }; // 저장 버튼 클릭 시 수정된 정보를 상태에 저장하고 인덱스 초기화
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (editEvent) {
       setEditEvent({ ...editEvent, [name]: value });
     }
-  };// input 값이 변경될 때마다 상태에 저장
+  }; // input 값이 변경될 때마다 상태에 저장
 
   if (events.length === 0) {
     return <Text>일정이 없습니다.</Text>;
@@ -73,17 +73,27 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
                 value={editEvent?.position || ""}
                 onChange={handleInputChange}
               />
-              <EventInputField 
+              <EventInputField
                 placeholder="메모"
-                name = "description"
+                name="description"
                 value={editEvent?.description || ""}
                 onChange={handleInputChange}
               />
-              <Flex gap={2} mt={2}>
-                <Button background="green" onClick={handleSaveClick}>
+              <Flex gap={2} mt={2} justifyContent="flex-end">
+                <Button
+                  background="none"
+                  color="black"
+                  onClick={handleSaveClick}
+                >
                   저장
                 </Button>
-                <Button onClick={() => setEditIndex(null)}>취소</Button>
+                <Button
+                  background="none"
+                  color="black"
+                  onClick={() => setEditIndex(null)}
+                >
+                  취소
+                </Button>
               </Flex>
             </Flex>
           ) : (
@@ -93,11 +103,17 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <Text>면접 장소: {event.location}</Text>
               <Text>면접 날짜/시간: {event.dateTime}</Text>
               <Text>지원 직무: {event.position}</Text>
-              <Flex gap={2} mt={2}>
-                <Button background="green" onClick={() => handleEditClick(index)}>
+              <Flex gap={2} mt={2} justifyContent="flex-end">
+                <Button
+                  variant="ghost"
+                  onClick={() => handleEditClick(index)}
+                >
                   수정
                 </Button>
-                <Button colorScheme="red" onClick={() => onDelete(index)}>
+                <Button
+                  variant="ghost"
+                  onClick={() => onDelete(index)}
+                >
                   삭제
                 </Button>
               </Flex>

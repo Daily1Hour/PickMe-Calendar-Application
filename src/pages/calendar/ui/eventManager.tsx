@@ -9,11 +9,17 @@ type EventManagerProps = {
   selectedDate: Date | null;
 };
 
-const EventManager = ({ events, onDelete, onUpdate, selectedDate }: EventManagerProps) => {
+const EventManager = ({
+  events,
+  onDelete,
+  onUpdate,
+  selectedDate,
+}: EventManagerProps) => {
   return (
-    <Box mt={6}>
+    <Box mt={6} width="700px">
       <Text fontSize="lg">
-        {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의 일정:
+        {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의
+        일정:
       </Text>
       <EventList events={events} onDelete={onDelete} onUpdate={onUpdate} />
     </Box>

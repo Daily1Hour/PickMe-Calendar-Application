@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box } from "@chakra-ui/react";
-import CalendarWrapper from "./calendarWrap";
 import EventDialog from "./eventDialog";
 import EventManager from "./eventManager";
+import DetailCalendar from "./DetailCalendar";
 
 export type EventDetails = {
   companyName: string;
@@ -17,36 +17,33 @@ export type Events = {
   [date: string]: EventDetails[];
 };
 
-const CalendarForm = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [events, setEvents] = useState<Events>({});
+const CalendarForm = ({
+  selectedDate,
+  onDateChange,
+  currentMonth,
+  onMonthChange,
+  events,
+  onAddEvent,
+  onDeleteEvent,
+  onUpdateEvent,
+}: {
+  selectedDate: Date | null;
+  onDateChange: (date: Date | null) => void;
+  currentMonth: Date;
+  onMonthChange: (month: Date) => void;
+  events: Events;
+  onAddEvent: (newEvent: EventDetails) => void;
+  onDeleteEvent: (index: number) => void;
+  onUpdateEvent: (index: number, updatedEvent: EventDetails) => void;
+}) => {
   const [newEvent, setNewEvent] = useState<EventDetails>({
     companyName: "",
     interviewType: "",
     location: "",
     dateTime: "",
     position: "",
-    description: ""
+    description: "",
   });
-
-  const handleAddEvent = () => {
-    if (!selectedDate) return;
-
-    const dateKey = selectedDate.toDateString();
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), newEvent],
-    }));
-
-    setNewEvent({
-      companyName: "",
-      interviewType: "",
-      location: "",
-      dateTime: "",
-      position: "",
-      description: ""
-    });
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,35 +53,27 @@ const CalendarForm = () => {
     }));
   };
 
-  const handleDeleteEvent = (index: number) => {
-    if (!selectedDate) return;
-
-    const dateKey = selectedDate.toDateString();
-    const updatedEvents = [...(events[dateKey] || [])];
-    updatedEvents.splice(index, 1);
-
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: updatedEvents,
-    }));
-  };
-
-  const handleUpdateEvent = (index: number, updatedEvent: EventDetails) => {
-    if (!selectedDate) return;
-
-    const dateKey = selectedDate.toDateString();
-    const updatedEvents = [...(events[dateKey] || [])];
-    updatedEvents[index] = updatedEvent;
-
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: updatedEvents,
-    }));
+  const handleAddEvent = () => {
+    onAddEvent(newEvent);
+    setNewEvent({
+      companyName: "",
+      interviewType: "",
+      location: "",
+      dateTime: "",
+      position: "",
+      description: "",
+    });
   };
 
   return (
-    <Box maxW="600px" mx="auto" mt={10} p={4} borderWidth="1px" borderRadius="lg">
-      <CalendarWrapper selectedDate={selectedDate} onDateChange={setSelectedDate} events={events} />
+    <Box mx="auto" mt={10} p={4} placeItems="center">
+      <DetailCalendar
+        selectedDate={selectedDate}
+        onDateChange={onDateChange}
+        currentMonth={currentMonth}
+        onMonthChange={onMonthChange}
+        events={events}
+      />
       <EventDialog
         newEvent={newEvent}
         onChange={handleInputChange}
@@ -92,12 +81,11 @@ const CalendarForm = () => {
       />
       <EventManager
         events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
-        onDelete={handleDeleteEvent}
-        onUpdate={handleUpdateEvent}
+        onDelete={onDeleteEvent}
+        onUpdate={onUpdateEvent}
         selectedDate={selectedDate}
       />
     </Box>
   );
 };
-
 export default CalendarForm;

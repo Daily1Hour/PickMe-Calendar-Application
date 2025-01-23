@@ -1,45 +1,45 @@
 import {
-    DialogBody,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger,
-    Button,
-  } from "@chakra-ui/react";
-  import EventForm from "./eventForm";
-  import { EventDetails } from "./calendarForm";
-  
-  type EventDialogProps = {
-    newEvent: EventDetails;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onAdd: () => void;
-  };
-  
-  const EventDialog = ({ newEvent, onChange, onAdd }: EventDialogProps) => {
-    return (
-      <DialogRoot>
-        <DialogTrigger asChild>
-          <Button mt={4} background="green">
+  Button,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverTitle,
+  PopoverCloseTrigger,
+} from "@chakra-ui/react";
+import EventForm from "./eventForm";
+import { EventDetails } from "./calendarForm";
+
+type EventDialogProps = {
+  newEvent: EventDetails;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAdd: () => void;
+};
+
+const EventDialog = ({ newEvent, onChange, onAdd }: EventDialogProps) => {
+  return (
+    <PopoverRoot>
+      <PopoverTrigger asChild>
+        <Button mt={4} colorPalette="teal" fontWeight="bold">
+          일정 추가
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>
             일정 추가
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>일정 추가</DialogTitle>
-          </DialogHeader>
-          <DialogBody>
-            <EventForm newEvent={newEvent} onChange={onChange} onAdd={onAdd} />
-          </DialogBody>
-          <DialogFooter>
-            <DialogTrigger>
+            <PopoverCloseTrigger>
               <Button variant="ghost">X</Button>
-            </DialogTrigger>
-          </DialogFooter>
-        </DialogContent>
-      </DialogRoot>
-    );
-  };
-  
-  export default EventDialog;
+            </PopoverCloseTrigger>
+          </PopoverTitle>
+        </PopoverHeader>
+        <PopoverBody>
+          <EventForm newEvent={newEvent} onChange={onChange} onAdd={onAdd} />
+        </PopoverBody>
+      </PopoverContent>
+    </PopoverRoot>
+  );
+};
+
+export default EventDialog;

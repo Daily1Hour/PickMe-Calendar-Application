@@ -48,7 +48,7 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         value={newEvent.description}
         onChange={onChange}
       />
-      <Button background="green" onClick={onAdd}>
+      <Button colorPalette="teal" onClick={onAdd}>
         저장
       </Button>
     </Box>

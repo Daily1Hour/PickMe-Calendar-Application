@@ -14,16 +14,16 @@ export const StyledCalendar = styled(Calendar)`
       height: 45px;
 
       &:hover {
-        background-color: #009A6E;
+        background-color: #009a6e;
       }
     }
 
     .react-calendar__tile--now {
-      background: grey !important; /* 오늘 날짜 강조 */
+      background: grey !important;
     }
 
     .highlight-tile {
-      background-color: #90ee90 !important; /* 일정 있는 날짜 강조 */
+      background-color: #90ee90 !important;
       border-radius: 50%;
       color: white;
       font-weight: bold;
@@ -99,5 +99,3 @@ const CalendarWrapper = ({
 };
 
 export default CalendarWrapper;
-
-

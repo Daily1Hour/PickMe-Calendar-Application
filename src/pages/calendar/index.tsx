@@ -1,15 +1,15 @@
 import { Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import CalendarForm from "./ui/calendarForm";
 import CalendarPannel from "./ui/calendarPannel";
-import { Events, EventDetails } from "./ui/calendarPannel";
+import { Interview } from "../../entities/events/model/Interview";
+import CalendarForm from "./ui/calendarForm";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [events, setEvents] = useState<Events>({});
+  const [events, setEvents] = useState<Interview>(Interview.empty());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date()); // 추가된 월 상태
 
-  const handleAddEvent = (newEvent: EventDetails) => {
+  const handleAddEvent = (newEvent: Interview) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toDateString();
@@ -32,7 +32,7 @@ const CalendarPage = () => {
     }));
   };
 
-  const handleUpdateEvent = (index: number, updatedEvent: EventDetails) => {
+  const handleUpdateEvent = (index: number, updatedEvent: Interview) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toDateString();
@@ -53,9 +53,6 @@ const CalendarPage = () => {
         currentMonth={currentMonth} // 월 상태 전달
         onMonthChange={setCurrentMonth} // 월 변경 핸들러 전달
         events={events}
-        onAddEvent={handleAddEvent}
-        onDeleteEvent={handleDeleteEvent}
-        onUpdateEvent={handleUpdateEvent}
       />
       <CalendarForm
         selectedDate={selectedDate}

@@ -9,19 +9,7 @@ import {
 import CalendarWrapper from "./calendarWrap";
 import Preview from "./Preview";
 import { GrFormPrevious } from "react-icons/gr";
-
-export type EventDetails = {
-  companyName: string;
-  interviewType: string;
-  location: string;
-  dateTime: string;
-  position: string;
-  description: string;
-};
-
-export type Events = {
-  [date: string]: EventDetails[];
-};
+import { Interview } from "../../../entities/events/model/Interview";
 
 const CalendarPannel = ({
   selectedDate,
@@ -34,10 +22,7 @@ const CalendarPannel = ({
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Events;
-  onAddEvent: (newEvent: EventDetails) => void;
-  onDeleteEvent: (index: number) => void;
-  onUpdateEvent: (index: number, updatedEvent: EventDetails) => void;
+  events: Interview;
 }) => {
   return (
     <PopoverRoot closeOnInteractOutside={false} defaultOpen unstyled>
@@ -53,7 +38,9 @@ const CalendarPannel = ({
         bg="white"
       >
         <PopoverCloseTrigger alignSelf="end" p="10px" position={"fixed"}>
-          <Button variant="ghost"><GrFormPrevious /></Button>
+          <Button variant="ghost">
+            <GrFormPrevious />
+          </Button>
         </PopoverCloseTrigger>
         <Box mx="auto" my={10} p={4}>
           <CalendarWrapper

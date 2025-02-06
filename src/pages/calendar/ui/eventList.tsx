@@ -1,22 +1,24 @@
 import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import EventInputField from "./eventInputField";
-import { EventDetails } from "./calendarForm";
+import { GetInterviewDetailDTO } from "../api/calendarDTOList";
 
 type EventListProps = {
-  events: EventDetails[];
+  events: GetInterviewDetailDTO[];
   onDelete: (index: number) => void;
-  onUpdate: (index: number, updatedEvent: EventDetails) => void;
+  onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
 };
 
 const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editEvent, setEditEvent] = useState<EventDetails | null>(null);
+  const [editEvent, setEditEvent] = useState<GetInterviewDetailDTO | null>(
+    null
+  );
 
   const handleEditClick = (index: number) => {
     setEditIndex(index);
     setEditEvent(events[index]);
-  }; // 수정 버튼 클릭 시 해당 이벤트의 인덱스와 정보를 상태에 저장
+  };
 
   const handleSaveClick = () => {
     if (editIndex !== null && editEvent) {
@@ -24,14 +26,31 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
       setEditIndex(null);
       setEditEvent(null);
     }
-  }; // 저장 버튼 클릭 시 수정된 정보를 상태에 저장하고 인덱스 초기화
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (editEvent) {
-      setEditEvent({ ...editEvent, [name]: value });
-    }
-  }; // input 값이 변경될 때마다 상태에 저장
+
+    setEditEvent((prev) => {
+      if (!prev) return prev;
+
+      if (name === "companyName") {
+        return {
+          ...prev,
+          company: [{ ...prev.company[0], name: value }],
+        };
+      }
+
+      if (name === "location") {
+        return {
+          ...prev,
+          company: [{ ...prev.company[0], location: value }],
+        };
+      }
+
+      return { ...prev, [name]: value };
+    });
+  };
 
   if (events.length === 0) {
     return <Text>일정이 없습니다.</Text>;
@@ -46,25 +65,25 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <EventInputField
                 placeholder="회사명"
                 name="companyName"
-                value={editEvent?.companyName || ""}
+                value={editEvent?.company[0]?.name || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
                 placeholder="면접 유형"
-                name="interviewType"
-                value={editEvent?.interviewType || ""}
+                name="category"
+                value={editEvent?.category || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
                 placeholder="면접 장소"
                 name="location"
-                value={editEvent?.location || ""}
+                value={editEvent?.company[0]?.location || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
                 placeholder="면접 시간"
-                name="dateTime"
-                value={editEvent?.dateTime || ""}
+                name="interviewTime"
+                value={editEvent?.interviewTime || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
@@ -98,10 +117,10 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
             </Flex>
           ) : (
             <>
-              <Text fontWeight="bold">회사명: {event.companyName}</Text>
-              <Text>면접 유형: {event.interviewType}</Text>
-              <Text>면접 장소: {event.location}</Text>
-              <Text>면접 시간: {event.dateTime}</Text>
+              <Text fontWeight="bold">회사명: {event.company[0]?.name}</Text>
+              <Text>면접 유형: {event.category}</Text>
+              <Text>면접 장소: {event.company[0]?.location}</Text>
+              <Text>면접 시간: {event.interviewTime}</Text>
               <Text>지원 직무: {event.position}</Text>
               <Flex gap={2} mt={2} justifyContent="flex-end">
                 <Button variant="ghost" onClick={() => handleEditClick(index)}>

@@ -1,39 +1,50 @@
-// components/EventForm.tsx
 import { Box, Button } from "@chakra-ui/react";
 import EventInputField from "./eventInputField";
-import { EventDetails } from "./calendarForm";
+import { createInterview } from "../api/calendarApi";
+import { Interview } from "../../../entities/events/model/Interview";
+import { Company } from "../../../entities/events/model/Company";
 
-type EventFormProps = {
-  newEvent: EventDetails;
+export type EventFormProps = {
+  newEvent: Interview;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAdd: () => void;
 };
 
 const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
+  const handleSubmit = async () => {
+    try {
+      await createInterview();
+      onAdd();
+    } catch (error) {
+      console.error("면접 정보 저장 실패:", error);
+    }
+  };
+  console.log(newEvent);
+
   return (
     <Box>
       <EventInputField
         placeholder="회사명"
-        name="companyName"
-        value={newEvent.companyName}
-        onChange={onChange}
-      />
-      <EventInputField
-        placeholder="면접 유형"
-        name="interviewType"
-        value={newEvent.interviewType}
+        name="name"
+        value={newEvent.company.name}
         onChange={onChange}
       />
       <EventInputField
         placeholder="면접 장소"
         name="location"
-        value={newEvent.location}
+        value={newEvent.company.location}
+        onChange={onChange}
+      />
+      <EventInputField
+        placeholder="면접 유형"
+        name="category"
+        value={newEvent.category}
         onChange={onChange}
       />
       <EventInputField
         placeholder="면접 시간"
-        name="dateTime"
-        value={newEvent.dateTime}
+        name="interviewTime"
+        value={newEvent.interviewTime}
         onChange={onChange}
       />
       <EventInputField
@@ -48,7 +59,7 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         value={newEvent.description}
         onChange={onChange}
       />
-      <Button colorPalette="teal" onClick={onAdd}>
+      <Button colorScheme="teal" onClick={handleSubmit}>
         저장
       </Button>
     </Box>

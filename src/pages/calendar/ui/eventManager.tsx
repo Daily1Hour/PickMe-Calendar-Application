@@ -1,11 +1,11 @@
 import { Box, Text } from "@chakra-ui/react";
 import EventList from "./eventList";
-import { EventDetails } from "./calendarForm";
+import { GetInterviewDetailDTO } from "../api/calendarDTOList";
 
 type EventManagerProps = {
-  events: EventDetails[];
+  events: GetInterviewDetailDTO[];
   onDelete: (index: number) => void;
-  onUpdate: (index: number, updatedEvent: EventDetails) => void;
+  onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
   selectedDate: Date | null;
 };
 

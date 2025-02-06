@@ -2,6 +2,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
 import { Box } from "@chakra-ui/react";
 import styled from "styled-components";
+import { Interview } from "../../../entities/events/model/Interview";
 
 export const StyledCalendar = styled(Calendar)`
   &.react-calendar-custom {
@@ -31,25 +32,12 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-type EventDetails = {
-  companyName: string;
-  interviewType: string;
-  location: string;
-  dateTime: string;
-  position: string;
-  description: string;
-};
-
-type Events = {
-  [date: string]: EventDetails[];
-};
-
 type CalendarWrapperProps = {
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Events; // 일정 데이터 추가
+  events: Interview; // 일정 데이터 추가
 };
 
 const CalendarWrapper = ({

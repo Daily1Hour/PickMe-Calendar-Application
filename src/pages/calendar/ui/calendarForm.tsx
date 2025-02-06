@@ -3,19 +3,9 @@ import { Box } from "@chakra-ui/react";
 import EventDialog from "./eventDialog";
 import EventManager from "./eventManager";
 import DetailCalendar from "./DetailCalendar";
-
-export type EventDetails = {
-  companyName: string;
-  interviewType: string;
-  location: string;
-  dateTime: string;
-  position: string;
-  description: string;
-};
-
-export type Events = {
-  [date: string]: EventDetails[];
-};
+import { EventFormProps } from "./eventForm";
+import { PostInterviewDetailDTO } from "../api/calendarDTOList";
+import { Interview } from "../../../entities/events/model/Interview";
 
 const CalendarForm = ({
   selectedDate,
@@ -31,19 +21,12 @@ const CalendarForm = ({
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Events;
-  onAddEvent: (newEvent: EventDetails) => void;
+  events: Interview;
+  onAddEvent: (newEvent: Interview) => void;
   onDeleteEvent: (index: number) => void;
-  onUpdateEvent: (index: number, updatedEvent: EventDetails) => void;
+  onUpdateEvent: (index: number, updatedEvent: Interview) => void;
 }) => {
-  const [newEvent, setNewEvent] = useState<EventDetails>({
-    companyName: "",
-    interviewType: "",
-    location: "",
-    dateTime: "",
-    position: "",
-    description: "",
-  });
+  const [newEvent, setNewEvent] = useState<Interview>(Interview.empty());
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,14 +38,7 @@ const CalendarForm = ({
 
   const handleAddEvent = () => {
     onAddEvent(newEvent);
-    setNewEvent({
-      companyName: "",
-      interviewType: "",
-      location: "",
-      dateTime: "",
-      position: "",
-      description: "",
-    });
+    setNewEvent(Interview.empty());
   };
 
   return (
@@ -79,12 +55,12 @@ const CalendarForm = ({
         onChange={handleInputChange}
         onAdd={handleAddEvent}
       />
-      <EventManager
+      {/* <EventManager
         events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
         onDelete={onDeleteEvent}
         onUpdate={onUpdateEvent}
         selectedDate={selectedDate}
-      />
+      /> */}
     </Box>
   );
 };

@@ -1,9 +1,9 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
-import { EventDetails } from "./calendarPannel";
 import { GrStatusGoodSmall } from "react-icons/gr";
+import { Company } from "../../../entities/events/model/Company";
 
 type PreviewProps = {
-  events: EventDetails[];
+  events: Company[];
   selectedDate: Date | null;
 };
 
@@ -19,8 +19,7 @@ const Preview = ({ events, selectedDate }: PreviewProps) => {
           <HStack>
             <GrStatusGoodSmall color="teal" />
             <Text>
-              회사: {event.companyName} | 장소: {event.location} 시간:{" "}
-              {event.dateTime}
+              회사: {event.name} | 장소: {event.location}
             </Text>
           </HStack>
         </Box>

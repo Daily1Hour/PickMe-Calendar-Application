@@ -18,7 +18,7 @@ const EventInputField = ({
       placeholder={placeholder}
       name={name}
       type="time"
-      value={value}
+      defaultValue={value}
       onChange={onChange}
       mb={2}
     />
@@ -26,7 +26,7 @@ const EventInputField = ({
     <Input
       placeholder={placeholder}
       name={name}
-      value={value}
+      defaultValue={value}
       onChange={onChange}
       mb={2}
     />

@@ -42,7 +42,7 @@ export interface GetCalendarDTO {
 
 export interface GetCompanyDTO {
     name: string
-    loctaion: string
+    location: string
 }
 
 export interface GetInterviewDetailDTO {

@@ -62,7 +62,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
                 onChange={handleInputChange}
               />
               <EventInputField
-                placeholder="면접 날짜/시간"
+                placeholder="면접 시간"
                 name="dateTime"
                 value={editEvent?.dateTime || ""}
                 onChange={handleInputChange}
@@ -101,19 +101,13 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <Text fontWeight="bold">회사명: {event.companyName}</Text>
               <Text>면접 유형: {event.interviewType}</Text>
               <Text>면접 장소: {event.location}</Text>
-              <Text>면접 날짜/시간: {event.dateTime}</Text>
+              <Text>면접 시간: {event.dateTime}</Text>
               <Text>지원 직무: {event.position}</Text>
               <Flex gap={2} mt={2} justifyContent="flex-end">
-                <Button
-                  variant="ghost"
-                  onClick={() => handleEditClick(index)}
-                >
+                <Button variant="ghost" onClick={() => handleEditClick(index)}>
                   수정
                 </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => onDelete(index)}
-                >
+                <Button variant="ghost" onClick={() => onDelete(index)}>
                   삭제
                 </Button>
               </Flex>

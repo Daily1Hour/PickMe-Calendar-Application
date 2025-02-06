@@ -7,8 +7,22 @@ type EventInputFieldProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const EventInputField = ({ placeholder, name, value, onChange }: EventInputFieldProps) => {
-  return (
+const EventInputField = ({
+  placeholder,
+  name,
+  value,
+  onChange,
+}: EventInputFieldProps) => {
+  return placeholder === "면접 시간" ? (
+    <Input
+      placeholder={placeholder}
+      name={name}
+      type="time"
+      value={value}
+      onChange={onChange}
+      mb={2}
+    />
+  ) : (
     <Input
       placeholder={placeholder}
       name={name}

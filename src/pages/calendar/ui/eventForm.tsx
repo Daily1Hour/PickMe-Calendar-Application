@@ -31,7 +31,7 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         onChange={onChange}
       />
       <EventInputField
-        placeholder="면접 날짜/시간"
+        placeholder="면접 시간"
         name="dateTime"
         value={newEvent.dateTime}
         onChange={onChange}

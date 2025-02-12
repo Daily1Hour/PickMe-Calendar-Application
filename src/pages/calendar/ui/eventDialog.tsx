@@ -18,7 +18,6 @@ type EventDialogProps = {
 };
 
 const EventDialog = ({ newEvent, onChange, onAdd }: EventDialogProps) => {
-  console.log(newEvent);
   return (
     <PopoverRoot>
       <PopoverTrigger asChild>

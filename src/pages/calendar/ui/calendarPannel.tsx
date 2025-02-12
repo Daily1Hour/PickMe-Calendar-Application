@@ -22,7 +22,7 @@ const CalendarPannel = ({
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Interview;
+  events: Record<string, Interview[]>; // Change this line
 }) => {
   return (
     <PopoverRoot closeOnInteractOutside={false} defaultOpen unstyled>

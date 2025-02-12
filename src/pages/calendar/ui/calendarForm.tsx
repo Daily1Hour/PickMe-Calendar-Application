@@ -19,7 +19,7 @@ const CalendarForm = ({
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Interview;
+  events: { [key: string]: Interview[] };
   onAddEvent: (newEvent: Interview) => void;
   onDeleteEvent: (index: number) => void;
   onUpdateEvent: (index: number, updatedEvent: Interview) => void;
@@ -65,7 +65,7 @@ const CalendarForm = ({
         onAdd={handleAddEvent}
       />
       <EventManager
-        events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
+        events={selectedDate ? events[selectedDate.toDateString()] ?? [] : []}
         onDelete={onDeleteEvent}
         onUpdate={onUpdateEvent}
         selectedDate={selectedDate}

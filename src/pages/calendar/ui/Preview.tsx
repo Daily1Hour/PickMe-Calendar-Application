@@ -1,9 +1,9 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
 import { GrStatusGoodSmall } from "react-icons/gr";
-import { Company } from "../../../entities/events/model/Company";
+import { Interview } from "../../../entities/events/model/Interview";
 
 type PreviewProps = {
-  events: Company[];
+  events: Interview[]; // Change this line
   selectedDate: Date | null;
 };
 

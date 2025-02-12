@@ -1,7 +1,7 @@
 import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import EventInputField from "./eventInputField";
 import { GetInterviewDetailDTO } from "../api/calendarDTOList";
+import EventInputField from "./eventInputField";
 
 type EventListProps = {
   events: GetInterviewDetailDTO[];
@@ -20,7 +20,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
     setEditEvent(events[index]);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (editIndex !== null && editEvent) {
       onUpdate(editIndex, editEvent);
       setEditIndex(null);
@@ -37,14 +37,14 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
       if (name === "companyName") {
         return {
           ...prev,
-          company: [{ ...prev.company[0], name: value }],
+          company: { ...prev.company, name: value },
         };
       }
 
       if (name === "location") {
         return {
           ...prev,
-          company: [{ ...prev.company[0], location: value }],
+          company: { ...prev.company, location: value },
         };
       }
 
@@ -65,7 +65,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <EventInputField
                 placeholder="회사명"
                 name="companyName"
-                value={editEvent?.company[0]?.name || ""}
+                value={editEvent?.company.name || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
@@ -77,7 +77,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <EventInputField
                 placeholder="면접 장소"
                 name="location"
-                value={editEvent?.company[0]?.location || ""}
+                value={editEvent?.company.location || ""}
                 onChange={handleInputChange}
               />
               <EventInputField
@@ -117,9 +117,9 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
             </Flex>
           ) : (
             <>
-              <Text fontWeight="bold">회사명: {event.company[0]?.name}</Text>
+              <Text fontWeight="bold">회사명: {event.company?.name}</Text>
               <Text>면접 유형: {event.category}</Text>
-              <Text>면접 장소: {event.company[0]?.location}</Text>
+              <Text>면접 장소: {event.company?.location}</Text>
               <Text>면접 시간: {event.interviewTime}</Text>
               <Text>지원 직무: {event.position}</Text>
               <Flex gap={2} mt={2} justifyContent="flex-end">

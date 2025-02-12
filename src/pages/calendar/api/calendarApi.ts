@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetCompanyDTO } from "./calendarDTOList";
+import { GetCalendarDTO, GetCompanyDTO, GetInterviewDetailDTO } from "./calendarDTOList";
 import { Interview } from "../../../entities/events/model/Interview";
 import { interviewToCreateDto } from "../service/interviewToDto";
 
@@ -22,6 +22,11 @@ export const updateCompany = async (interviewDetailId: string, data: GetCompanyD
 
 export const getInterview = async (interviewDetailId: string) => {
     const response = await client.get(`/interview/${interviewDetailId}`);
+    return response.data;
+}
+
+export const getCalendar = async (): Promise<GetCalendarDTO> => {
+    const response = await client.get('/interviews');
     return response.data;
 }
 

@@ -15,7 +15,6 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
 
   const handleSubmit = async () => {
     try {
-      console.log("API 요청 데이터:", newEvent);
       await createInterview(newEvent);
       onAdd();
     } catch (error) {

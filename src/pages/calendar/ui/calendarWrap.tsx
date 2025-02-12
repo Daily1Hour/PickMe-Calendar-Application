@@ -37,7 +37,7 @@ type CalendarWrapperProps = {
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Interview; // 일정 데이터 추가
+  events: Record<string, Interview[]>; // 일정 데이터 추가
 };
 
 const CalendarWrapper = ({

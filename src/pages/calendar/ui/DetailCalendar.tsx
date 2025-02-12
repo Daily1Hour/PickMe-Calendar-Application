@@ -71,7 +71,7 @@ type CalendarWrapperProps = {
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Interview; // 일정 데이터 추가
+  events: Record<string, Interview[]>;
 };
 
 const DetailCalendar = ({
@@ -81,9 +81,8 @@ const DetailCalendar = ({
   onMonthChange,
   events,
 }: CalendarWrapperProps) => {
-  // 특정 날짜에 일정이 있는지 확인하는 함수
   const dateHasEvent = (date: Date) => {
-    const dateKey = date.toDateString();
+    const dateKey = date.toISOString().split("T")[0];
     return events[dateKey]?.length > 0;
   };
 
@@ -100,7 +99,7 @@ const DetailCalendar = ({
       }}
       onActiveStartDateChange={({ activeStartDate }) => {
         if (activeStartDate) {
-          onMonthChange(activeStartDate); // 월 변경 핸들러 호출
+          onMonthChange(activeStartDate);
         }
       }}
       value={selectedDate}
@@ -113,7 +112,7 @@ const DetailCalendar = ({
       prev2Label={null}
       next2Label={null}
       showNeighboringMonth={false}
-      activeStartDate={currentMonth} // 현재 월 상태와 동기화
+      activeStartDate={currentMonth}
     />
   );
 };

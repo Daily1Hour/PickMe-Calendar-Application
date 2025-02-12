@@ -1,18 +1,55 @@
 import { Flex } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarPannel from "./ui/calendarPannel";
-import { Interview } from "../../entities/events/model/Interview";
 import CalendarForm from "./ui/calendarForm";
+import { Interview } from "../../entities/events/model/Interview";
+import { getCalendar } from "./api/calendarApi";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [events, setEvents] = useState<Interview>(Interview.empty());
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date()); // 추가된 월 상태
+  const [events, setEvents] = useState<Record<string, Interview[]>>({});
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await getCalendar();
+        const mappedEvents: Record<string, Interview[]> = {};
+
+        response.interviewDetails.forEach((interview: Interview) => {
+          const dateKey = interview.interviewTime?.split("T")[0];
+          if (dateKey) {
+            if (!mappedEvents[dateKey]) {
+              mappedEvents[dateKey] = [];
+            }
+            mappedEvents[dateKey].push({
+              interviewTime: interview.interviewTime,
+              category: interview.category,
+              position: interview.position,
+              description: interview.description,
+              company: {
+                name: interview.company.name,
+                location: interview.company.location,
+              },
+              interviewDetailId: "",
+            });
+          }
+        });
+
+        setEvents(mappedEvents);
+        console.log("API에서 불러온 events:", mappedEvents);
+      } catch (error) {
+        console.error("Failed to fetch interview events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleAddEvent = (newEvent: Interview) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toDateString();
+    const dateKey = selectedDate.toISOString().split("T")[0];
     setEvents((prev) => ({
       ...prev,
       [dateKey]: [...(prev[dateKey] || []), newEvent],
@@ -22,7 +59,7 @@ const CalendarPage = () => {
   const handleDeleteEvent = (index: number) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toDateString();
+    const dateKey = selectedDate.toISOString().split("T")[0];
     const updatedEvents = [...(events[dateKey] || [])];
     updatedEvents.splice(index, 1);
 
@@ -35,7 +72,7 @@ const CalendarPage = () => {
   const handleUpdateEvent = (index: number, updatedEvent: Interview) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toDateString();
+    const dateKey = selectedDate.toISOString().split("T")[0];
     const updatedEvents = [...(events[dateKey] || [])];
     updatedEvents[index] = updatedEvent;
 
@@ -50,15 +87,15 @@ const CalendarPage = () => {
       <CalendarPannel
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
-        currentMonth={currentMonth} // 월 상태 전달
-        onMonthChange={setCurrentMonth} // 월 변경 핸들러 전달
+        currentMonth={currentMonth}
+        onMonthChange={setCurrentMonth}
         events={events}
       />
       <CalendarForm
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
-        currentMonth={currentMonth} // 월 상태 전달
-        onMonthChange={setCurrentMonth} // 월 변경 핸들러 전달
+        currentMonth={currentMonth}
+        onMonthChange={setCurrentMonth}
         events={events}
         onAddEvent={handleAddEvent}
         onDeleteEvent={handleDeleteEvent}

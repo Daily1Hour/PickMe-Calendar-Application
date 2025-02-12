@@ -1,5 +1,7 @@
 import axios from "axios";
 import { GetCompanyDTO } from "./calendarDTOList";
+import { Interview } from "../../../entities/events/model/Interview";
+import { interviewToCreateDto } from "../service/interviewToDto";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;
@@ -23,8 +25,10 @@ export const getInterview = async (interviewDetailId: string) => {
     return response.data;
 }
 
-export const createInterview = async () => {
-    const response = await client.post('/interview')
+export const createInterview = async (data: Interview): Promise<{ interviewRecordId: string }> => {
+    const dto = interviewToCreateDto(data);
+    const response = await client.post('/interview', dto)
+    console.log(data)
     return response.data;
 }
 

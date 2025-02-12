@@ -4,7 +4,7 @@ export interface PutCompanyDTO {
 }
 
 export interface PutInterviewDetailDTO {
-    company: PutCompanyDTO[]
+    company: PutCompanyDTO
     interviewTime: string
     position: string
     category: string
@@ -22,7 +22,7 @@ export interface PostCompanyDTO {
 }
 
 export interface PostInterviewDetailDTO {
-    company: PostCompanyDTO[]
+    company: PostCompanyDTO
     interviewTime: string
     position: string
     category: string
@@ -47,7 +47,7 @@ export interface GetCompanyDTO {
 
 export interface GetInterviewDetailDTO {
     interviewDetailId: string
-    company: GetCompanyDTO[]
+    company: GetCompanyDTO
     interviewTime: string
     position: string
     category: string
@@ -57,7 +57,7 @@ export interface GetInterviewDetailDTO {
 export interface GetInterviewDTO {
     clientId: string
     interviewDetailId: string
-    company: GetCompanyDTO[]
+    company: GetCompanyDTO
     interviewTime: string
     position: string
     category: string

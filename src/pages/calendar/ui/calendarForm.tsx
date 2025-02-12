@@ -3,8 +3,6 @@ import { Box } from "@chakra-ui/react";
 import EventDialog from "./eventDialog";
 import EventManager from "./eventManager";
 import DetailCalendar from "./DetailCalendar";
-import { EventFormProps } from "./eventForm";
-import { PostInterviewDetailDTO } from "../api/calendarDTOList";
 import { Interview } from "../../../entities/events/model/Interview";
 
 const CalendarForm = ({
@@ -30,10 +28,21 @@ const CalendarForm = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewEvent((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    setNewEvent((prev) => {
+      if (name.startsWith("company.")) {
+        const field = name.split(".")[1];
+        return {
+          ...prev,
+          company: {
+            ...prev.company,
+            [field]: value,
+          },
+        };
+      } else {
+        return { ...prev, [name]: value };
+      }
+    });
   };
 
   const handleAddEvent = () => {
@@ -55,12 +64,12 @@ const CalendarForm = ({
         onChange={handleInputChange}
         onAdd={handleAddEvent}
       />
-      {/* <EventManager
+      <EventManager
         events={selectedDate ? events[selectedDate.toDateString()] || [] : []}
         onDelete={onDeleteEvent}
         onUpdate={onUpdateEvent}
         selectedDate={selectedDate}
-      /> */}
+      />
     </Box>
   );
 };

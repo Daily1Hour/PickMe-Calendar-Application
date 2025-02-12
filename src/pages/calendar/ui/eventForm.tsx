@@ -2,7 +2,7 @@ import { Box, Button } from "@chakra-ui/react";
 import EventInputField from "./eventInputField";
 import { createInterview } from "../api/calendarApi";
 import { Interview } from "../../../entities/events/model/Interview";
-import { Company } from "../../../entities/events/model/Company";
+import { useState } from "react";
 
 export type EventFormProps = {
   newEvent: Interview;
@@ -11,53 +11,76 @@ export type EventFormProps = {
 };
 
 const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
+  const [eventData, setEventData] = useState<Interview>(newEvent);
+
   const handleSubmit = async () => {
     try {
-      await createInterview();
+      console.log("API 요청 데이터:", newEvent);
+      await createInterview(newEvent);
       onAdd();
     } catch (error) {
       console.error("면접 정보 저장 실패:", error);
     }
   };
-  console.log(newEvent);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setEventData((prev) => {
+      if (name.startsWith("company.")) {
+        const field = name.split(".")[1];
+        return {
+          ...prev,
+          company: {
+            ...prev.company,
+            [field]: value,
+          },
+        };
+      } else {
+        return { ...prev, [name]: value };
+      }
+    });
+
+    onChange(e);
+  };
 
   return (
     <Box>
       <EventInputField
         placeholder="회사명"
-        name="name"
-        value={newEvent.company.name}
-        onChange={onChange}
+        name="company.name"
+        value={eventData.company.name}
+        onChange={handleInputChange}
       />
       <EventInputField
         placeholder="면접 장소"
-        name="location"
-        value={newEvent.company.location}
-        onChange={onChange}
+        name="company.location"
+        value={eventData.company.location}
+        onChange={handleInputChange}
       />
       <EventInputField
         placeholder="면접 유형"
         name="category"
-        value={newEvent.category}
-        onChange={onChange}
+        value={eventData.category}
+        onChange={handleInputChange}
       />
       <EventInputField
         placeholder="면접 시간"
         name="interviewTime"
-        value={newEvent.interviewTime}
-        onChange={onChange}
+        value={eventData.interviewTime}
+        onChange={handleInputChange}
       />
       <EventInputField
         placeholder="지원 직무"
         name="position"
-        value={newEvent.position}
-        onChange={onChange}
+        value={eventData.position}
+        onChange={handleInputChange}
       />
       <EventInputField
         placeholder="메모"
         name="description"
-        value={newEvent.description}
-        onChange={onChange}
+        value={eventData.description}
+        onChange={handleInputChange}
       />
       <Button colorScheme="teal" onClick={handleSubmit}>
         저장

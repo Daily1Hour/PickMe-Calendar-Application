@@ -8,9 +8,17 @@ import {
   PopoverTitle,
   PopoverCloseTrigger,
 } from "@chakra-ui/react";
-import EventForm, { EventFormProps } from "./eventForm";
+import EventForm from "./eventForm";
+import { Interview } from "../../../entities/events/model/Interview";
 
-const EventDialog = ({ newEvent, onChange, onAdd }: EventFormProps) => {
+type EventDialogProps = {
+  newEvent: Interview;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAdd: () => void;
+};
+
+const EventDialog = ({ newEvent, onChange, onAdd }: EventDialogProps) => {
+  console.log(newEvent);
   return (
     <PopoverRoot>
       <PopoverTrigger asChild>

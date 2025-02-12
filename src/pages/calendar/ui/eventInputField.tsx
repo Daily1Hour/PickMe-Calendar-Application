@@ -13,20 +13,12 @@ const EventInputField = ({
   value,
   onChange,
 }: EventInputFieldProps) => {
-  return placeholder === "면접 시간" ? (
+  return (
     <Input
       placeholder={placeholder}
       name={name}
-      type="time"
-      defaultValue={value}
-      onChange={onChange}
-      mb={2}
-    />
-  ) : (
-    <Input
-      placeholder={placeholder}
-      name={name}
-      defaultValue={value}
+      type={placeholder === "면접 시간" ? "time" : "text"}
+      value={value}
       onChange={onChange}
       mb={2}
     />

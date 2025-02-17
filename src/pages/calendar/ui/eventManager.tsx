@@ -16,7 +16,6 @@ const EventManager = ({
   onUpdate,
   selectedDate,
 }: EventManagerProps) => {
-  console.log("EventManagerd의", events);
   return (
     <Box mt={6} width="700px">
       <Text fontSize="lg">

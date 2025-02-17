@@ -2,9 +2,10 @@ import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import { GetInterviewDetailDTO } from "../api/calendarDTOList";
 import EventInputField from "./eventInputField";
+import { Interview } from "../../../entities/events/model/Interview";
 
 type EventListProps = {
-  events: GetInterviewDetailDTO[];
+  events: Interview[];
   onDelete: (index: number) => void;
   onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
 };

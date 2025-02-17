@@ -1,9 +1,10 @@
 import { Box, Text } from "@chakra-ui/react";
 import EventList from "./eventList";
 import { GetInterviewDetailDTO } from "../api/calendarDTOList";
+import { Interview } from "../../../entities/events/model/Interview";
 
 type EventManagerProps = {
-  events: GetInterviewDetailDTO[];
+  events: Interview[];
   onDelete: (index: number) => void;
   onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
   selectedDate: Date | null;
@@ -15,6 +16,7 @@ const EventManager = ({
   onUpdate,
   selectedDate,
 }: EventManagerProps) => {
+  console.log("EventManagerd의", events);
   return (
     <Box mt={6} width="700px">
       <Text fontSize="lg">

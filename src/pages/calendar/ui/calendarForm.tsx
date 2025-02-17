@@ -65,7 +65,11 @@ const CalendarForm = ({
         onAdd={handleAddEvent}
       />
       <EventManager
-        events={selectedDate ? events[selectedDate.toDateString()] ?? [] : []}
+        events={
+          selectedDate
+            ? events[selectedDate.toISOString().split("T")[0]] ?? []
+            : []
+        }
         onDelete={onDeleteEvent}
         onUpdate={onUpdateEvent}
         selectedDate={selectedDate}

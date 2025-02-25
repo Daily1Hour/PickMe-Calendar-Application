@@ -123,6 +123,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
               <Text>면접 장소: {event.company?.location}</Text>
               <Text>면접 시간: {event.interviewTime}</Text>
               <Text>지원 직무: {event.position}</Text>
+              <Text>메모: {event.description}</Text>
               <Flex gap={2} mt={2} justifyContent="flex-end">
                 <Button variant="ghost" onClick={() => handleEditClick(index)}>
                   수정

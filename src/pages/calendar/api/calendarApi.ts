@@ -1,7 +1,8 @@
 import axios from "axios";
-import { GetCalendarDTO, GetCompanyDTO, GetInterviewDetailDTO } from "./calendarDTOList";
+import { GetCalendarDTO, GetCompanyDTO, GetInterviewDetailDTO, GetInterviewDTO } from "./calendarDTOList";
 import { Interview } from "../../../entities/events/model/Interview";
 import { interviewToCreateDto } from "../service/interviewToDto";
+import { DtoToCalendarEvents, DtoToInterview } from "../service/DtoToInterview";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;
@@ -20,16 +21,21 @@ export const updateCompany = async (interviewDetailId: string, data: GetCompanyD
     return response.data;
 }
 
-export const getInterview = async (interviewDetailId: string) => {
+export const updateInterview = async (interviewDetailId: string, data: Interview) => {
+    const dto = interviewToCreateDto(data);
+    const response = await client.put(`/interview?interviewDetailId=${interviewDetailId}`, dto);
+    return response.data;
+}
+
+export const getInterview = async (interviewDetailId: string): Promise<Interview> => {
     const response = await client.get(`/interview/${interviewDetailId}`);
-    return response.data;
+    return DtoToInterview(response.data);
 }
 
-export const getCalendar = async (): Promise<GetCalendarDTO> => {
-    const response = await client.get('/interviews');
-    return response.data;
-}
-
+export const getCalendar = async (): Promise<Record<string, Interview[]>> => {
+    const response = await client.get<GetCalendarDTO>("/interviews");
+    return DtoToCalendarEvents(response.data);
+};
 export const createInterview = async (data: Interview): Promise<{ interviewRecordId: string }> => {
     const dto = interviewToCreateDto(data);
     const response = await client.post('/interview', dto)
@@ -38,6 +44,6 @@ export const createInterview = async (data: Interview): Promise<{ interviewRecor
 }
 
 export const deleteInterview = async (interviewDetailId: string) => {
-    const response = await client.delete(`/interviw/${interviewDetailId}`)
+    const response = await client.delete(`/interview?interviewDetailId=${interviewDetailId}`)
     return response.data
 }

@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import CalendarPannel from "./ui/calendarPannel";
 import CalendarForm from "./ui/calendarForm";
 import { Interview } from "../../entities/events/model/Interview";
-import { getCalendar } from "./api/calendarApi";
+import {
+  deleteInterview,
+  getCalendar,
+  updateInterview,
+} from "./api/calendarApi";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -13,40 +17,18 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await getCalendar();
-        const mappedEvents: Record<string, Interview[]> = {};
-
-        response.interviewDetails.forEach((interview: Interview) => {
-          const dateKey = interview.interviewTime?.split("T")[0];
-          if (dateKey) {
-            if (!mappedEvents[dateKey]) {
-              mappedEvents[dateKey] = [];
-            }
-            mappedEvents[dateKey].push({
-              interviewTime: interview.interviewTime,
-              category: interview.category,
-              position: interview.position,
-              description: interview.description,
-              company: {
-                name: interview.company.name,
-                location: interview.company.location,
-              },
-              interviewDetailId: "",
-            });
-          }
-        });
-
-        setEvents(mappedEvents);
-        console.log("API에서 불러온 events:", mappedEvents);
+        const fetchedEvents = await getCalendar();
+        setEvents(fetchedEvents);
+        console.log("events:", fetchedEvents);
       } catch (error) {
-        console.error("Failed to fetch interview events:", error);
+        console.error("불러오기 실패:", error);
       }
     };
 
     fetchEvents();
   }, []);
 
-  const handleAddEvent = (newEvent: Interview) => {
+  const handleAddEvent = async (newEvent: Interview) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toISOString().split("T")[0];
@@ -56,30 +38,47 @@ const CalendarPage = () => {
     }));
   };
 
-  const handleDeleteEvent = (index: number) => {
+  const handleDeleteEvent = async (index: number) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toISOString().split("T")[0];
-    const updatedEvents = [...(events[dateKey] || [])];
-    updatedEvents.splice(index, 1);
+    const eventsForDate = events[dateKey] || [];
 
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: updatedEvents,
-    }));
+    const eventToDelete = eventsForDate[index];
+    if (!eventToDelete) return;
+
+    try {
+      await deleteInterview(eventToDelete.interviewDetailId);
+      console.log(`Deleted event with ID: ${eventToDelete.interviewDetailId}`);
+
+      setEvents((prev) => {
+        const updatedEvents = [...(prev[dateKey] || [])];
+        updatedEvents.splice(index, 1);
+        return { ...prev, [dateKey]: updatedEvents };
+      });
+    } catch (error) {
+      console.error("Failed to delete interview event:", error);
+    }
   };
 
-  const handleUpdateEvent = (index: number, updatedEvent: Interview) => {
+  const handleUpdateEvent = async (index: number, updatedEvent: Interview) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toISOString().split("T")[0];
-    const updatedEvents = [...(events[dateKey] || [])];
-    updatedEvents[index] = updatedEvent;
 
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: updatedEvents,
-    }));
+    try {
+      await updateInterview(updatedEvent.interviewDetailId, updatedEvent);
+
+      setEvents((prev) => {
+        const updatedEvents = [...(prev[dateKey] || [])];
+        updatedEvents[index] = updatedEvent;
+        return { ...prev, [dateKey]: updatedEvents };
+      });
+
+      console.log("Interview event successfully updated!");
+    } catch (error) {
+      console.error("Failed to update interview event:", error);
+    }
   };
 
   return (

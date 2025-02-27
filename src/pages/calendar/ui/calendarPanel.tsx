@@ -54,7 +54,7 @@ const CalendarPanel = ({
           <Preview
             events={
               selectedDate
-                ? events[selectedDate.toISOString().split("T")[0]] ?? []
+                ? events[selectedDate.toLocaleDateString("sv-SE")] ?? []
                 : []
             }
             selectedDate={selectedDate}

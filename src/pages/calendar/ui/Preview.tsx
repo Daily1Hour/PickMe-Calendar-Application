@@ -3,7 +3,7 @@ import { GrStatusGoodSmall } from "react-icons/gr";
 import { Interview } from "../../../entities/events/model/Interview";
 
 type PreviewProps = {
-  events: Interview[]; // Change this line
+  events: Interview[];
   selectedDate: Date | null;
 };
 
@@ -12,8 +12,10 @@ const Preview = ({ events, selectedDate }: PreviewProps) => {
   return (
     <Box mt={6} w="20vw">
       <Text fontSize="lg">
-        {selectedDate ? selectedDate.toDateString() : "날짜를 선택해주세요."}의
-        일정:
+        {selectedDate
+          ? selectedDate.toLocaleDateString("sv-SE")
+          : "날짜를 선택해주세요."}
+        의 일정:
       </Text>
       {events.map((event, index) => (
         <Box

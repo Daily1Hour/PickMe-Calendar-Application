@@ -2,19 +2,20 @@ import { Interview } from "../../../entities/events/model/Interview";
 import { PostInterviewDetailDTO } from "../api/calendarDTOList";
 
 export function interviewToCreateDto(interview: Interview) {
-    let formattedInterviewTime = null;
+    let formattedInterviewTime = interview.interviewTime;
 
     if (interview.interviewTime) {
         try {
-            const today = new Date();
-            const [hours, minutes] = interview.interviewTime.split(":").map(Number);
-            today.setHours(hours, minutes, 0, 0);
+            const date = new Date(`${interview.interviewTime}:00`);
+            const kstoffset = 9 * 60 * 60 * 1000;
+            const kstDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000 + kstoffset);
 
-            formattedInterviewTime = today.toISOString();
+            formattedInterviewTime = kstDate.toISOString().replace("Z", "+09:00");
         } catch (error) {
             console.error("면접 시간 변환 오류:", error);
         }
     }
+
     return {
         company: {
             name: interview.company.name,

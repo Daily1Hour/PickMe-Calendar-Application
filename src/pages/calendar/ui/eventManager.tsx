@@ -19,7 +19,7 @@ const EventManager = ({
   return (
     <Box mt={6} width="700px">
       <Text fontSize="lg">
-        {selectedDate ? selectedDate.toDateString() : "No Date Selected"}의
+        {selectedDate ? selectedDate.toDateString() : "날짜를 선택해주세요!"}의
         일정:
       </Text>
       <EventList events={events} onDelete={onDelete} onUpdate={onUpdate} />

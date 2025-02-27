@@ -28,7 +28,7 @@ export const updateInterview = async (interviewDetailId: string, data: Interview
 }
 
 export const getInterview = async (interviewDetailId: string): Promise<Interview> => {
-    const response = await client.get(`/interview/${interviewDetailId}`);
+    const response = await client.get(`/interview?=interviewDetailId=${interviewDetailId}`);
     return DtoToInterview(response.data);
 }
 

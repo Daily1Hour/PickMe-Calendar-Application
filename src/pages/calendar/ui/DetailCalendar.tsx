@@ -82,9 +82,11 @@ const DetailCalendar = ({
   events,
 }: CalendarWrapperProps) => {
   const dateHasEvent = (date: Date) => {
-    const dateKey = date.toISOString().split("T")[0];
+    const dateKey = date.toLocaleDateString();
     return events[dateKey]?.length > 0;
   };
+
+  console.log("selectedDate:", selectedDate);
 
   return (
     <StyledCalendar

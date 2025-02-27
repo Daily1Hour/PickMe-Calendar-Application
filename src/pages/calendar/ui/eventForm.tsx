@@ -1,6 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
 import EventInputField from "./eventInputField";
-import { createInterview } from "../api/calendarApi";
 import { Interview } from "../../../entities/events/model/Interview";
 import { useState } from "react";
 
@@ -15,7 +14,6 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
 
   const handleSubmit = async () => {
     try {
-      await createInterview(newEvent);
       onAdd();
     } catch (error) {
       console.error("면접 정보 저장 실패:", error);
@@ -39,7 +37,6 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         return { ...prev, [name]: value };
       }
     });
-
     onChange(e);
   };
 
@@ -69,6 +66,7 @@ const EventForm = ({ newEvent, onChange, onAdd }: EventFormProps) => {
         value={eventData.interviewTime}
         onChange={handleInputChange}
       />
+
       <EventInputField
         placeholder="지원 직무"
         name="position"

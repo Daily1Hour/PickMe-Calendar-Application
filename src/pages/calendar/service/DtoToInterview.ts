@@ -33,7 +33,10 @@ export function DtoToCalendarEvents(dto: GetCalendarDTO): Record<string, Intervi
     dto.interviewDetails.forEach((interviewDetail) => {
         if (!interviewDetail.interviewTime) return;
 
-        const dateKey = interviewDetail.interviewTime.split("T")[0];
+        const date = new Date(interviewDetail.interviewTime);
+        const dateKey = date.toLocaleDateString();
+
+        console.log("dateKey:", dateKey);
 
         if (!events[dateKey]) {
             events[dateKey] = [];

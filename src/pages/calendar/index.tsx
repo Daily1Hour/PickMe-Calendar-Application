@@ -4,8 +4,10 @@ import CalendarPannel from "./ui/calendarPannel";
 import CalendarForm from "./ui/calendarForm";
 import { Interview } from "../../entities/events/model/Interview";
 import {
+  createInterview,
   deleteInterview,
   getCalendar,
+  getInterview,
   updateInterview,
 } from "./api/calendarApi";
 
@@ -28,14 +30,46 @@ const CalendarPage = () => {
     fetchEvents();
   }, []);
 
+  const handleDateClick = async (date: Date | null) => {
+    if (!date) return;
+
+    const dateKey = date.toISOString().split("T")[0];
+    console.log(dateKey);
+
+    if (!events.interviewDetailId) {
+      setSelectedDate(date);
+      return;
+    }
+
+    try {
+      const interview = await getInterview(dateKey);
+
+      setEvents((prev) => ({
+        ...prev,
+        [dateKey]: interview ? [interview] : [],
+      }));
+
+      setSelectedDate(date);
+    } catch (error) {
+      console.error("해당 날짜의 인터뷰 데이터를 불러오지 못했습니다:", error);
+    }
+  };
+
   const handleAddEvent = async (newEvent: Interview) => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toISOString().split("T")[0];
-    setEvents((prev) => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), newEvent],
-    }));
+    newEvent.interviewTime = `${dateKey}T${newEvent.interviewTime}`;
+
+    try {
+      await createInterview(newEvent);
+      setEvents((prev) => ({
+        ...prev,
+        [dateKey]: [...(prev[dateKey] || []), newEvent],
+      }));
+    } catch (error) {
+      console.error("실페!:", error);
+    }
   };
 
   const handleDeleteEvent = async (index: number) => {
@@ -85,14 +119,14 @@ const CalendarPage = () => {
     <Flex>
       <CalendarPannel
         selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
+        onDateChange={handleDateClick}
         currentMonth={currentMonth}
         onMonthChange={setCurrentMonth}
         events={events}
       />
       <CalendarForm
         selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
+        onDateChange={handleDateClick}
         currentMonth={currentMonth}
         onMonthChange={setCurrentMonth}
         events={events}

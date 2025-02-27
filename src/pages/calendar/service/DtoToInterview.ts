@@ -34,7 +34,7 @@ export function DtoToCalendarEvents(dto: GetCalendarDTO): Record<string, Intervi
         if (!interviewDetail.interviewTime) return;
 
         const date = new Date(interviewDetail.interviewTime);
-        const dateKey = date.toLocaleDateString();
+        const dateKey = date.toLocaleDateString("sv-SE");
 
         console.log("dateKey:", dateKey);
 

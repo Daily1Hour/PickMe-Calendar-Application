@@ -82,7 +82,7 @@ const DetailCalendar = ({
   events,
 }: CalendarWrapperProps) => {
   const dateHasEvent = (date: Date) => {
-    const dateKey = date.toLocaleDateString();
+    const dateKey = date.toLocaleDateString("sv-SE");
     return events[dateKey]?.length > 0;
   };
 

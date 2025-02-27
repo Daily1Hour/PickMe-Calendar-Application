@@ -33,8 +33,7 @@ const CalendarPage = () => {
   const handleDateClick = async (date: Date | null) => {
     if (!date) return;
 
-    const dateKey = date.toISOString().split("T")[0];
-    console.log(dateKey);
+    const dateKey = date.toLocaleDateString("sv-SE");
 
     if (!events.interviewDetailId) {
       setSelectedDate(date);
@@ -58,7 +57,7 @@ const CalendarPage = () => {
   const handleAddEvent = async (newEvent: Interview) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toISOString().split("T")[0];
+    const dateKey = selectedDate.toLocaleDateString("sv-SE");
     newEvent.interviewTime = `${dateKey}T${newEvent.interviewTime}`;
 
     try {
@@ -68,14 +67,14 @@ const CalendarPage = () => {
         [dateKey]: [...(prev[dateKey] || []), newEvent],
       }));
     } catch (error) {
-      console.error("실페!:", error);
+      console.error("실패!:", error);
     }
   };
 
   const handleDeleteEvent = async (index: number) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toISOString().split("T")[0];
+    const dateKey = selectedDate.toLocaleDateString("sv-SE");
     const eventsForDate = events[dateKey] || [];
 
     const eventToDelete = eventsForDate[index];
@@ -98,7 +97,7 @@ const CalendarPage = () => {
   const handleUpdateEvent = async (index: number, updatedEvent: Interview) => {
     if (!selectedDate) return;
 
-    const dateKey = selectedDate.toISOString().split("T")[0];
+    const dateKey = selectedDate.toLocaleDateString("sv-SE");
 
     try {
       await updateInterview(updatedEvent.interviewDetailId, updatedEvent);

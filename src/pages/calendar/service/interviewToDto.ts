@@ -7,10 +7,10 @@ export function interviewToCreateDto(interview: Interview) {
     if (interview.interviewTime) {
         try {
             const date = new Date(`${interview.interviewTime}:00`);
-            const kstoffset = 9 * 60 * 60 * 1000;
+            const kstoffset = 9 * 60 * 1000;
             const kstDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000 + kstoffset);
 
-            formattedInterviewTime = kstDate.toISOString().replace("Z", "+09:00");
+            formattedInterviewTime = kstDate.toISOString();
         } catch (error) {
             console.error("면접 시간 변환 오류:", error);
         }

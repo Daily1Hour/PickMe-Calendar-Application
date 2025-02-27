@@ -67,7 +67,7 @@ const CalendarForm = ({
       <EventManager
         events={
           selectedDate
-            ? events[selectedDate.toISOString().split("T")[0]] ?? []
+            ? events[selectedDate.toLocaleDateString("sv-SE")] ?? []
             : []
         }
         onDelete={onDeleteEvent}

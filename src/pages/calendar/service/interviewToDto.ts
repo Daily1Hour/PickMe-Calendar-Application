@@ -7,10 +7,10 @@ export function interviewToCreateDto(interview: Interview) {
     if (interview.interviewTime) {
         try {
             const date = new Date(`${interview.interviewTime}:00`);
-            const kstoffset = 9 * 60 * 1000;
-            const kstDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000 + kstoffset);
+            console.log("시간 확인:", date)
 
-            formattedInterviewTime = kstDate.toISOString();
+            formattedInterviewTime = date.toISOString();
+            console.log("변환된 시간:", formattedInterviewTime);
         } catch (error) {
             console.error("면접 시간 변환 오류:", error);
         }

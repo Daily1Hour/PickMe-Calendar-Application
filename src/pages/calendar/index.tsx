@@ -98,6 +98,7 @@ const CalendarPage = () => {
     if (!selectedDate) return;
 
     const dateKey = selectedDate.toLocaleDateString("sv-SE");
+    updatedEvent.interviewTime = `${dateKey}T${updatedEvent.interviewTime}`;
 
     try {
       await updateInterview(updatedEvent.interviewDetailId, updatedEvent);

@@ -11,7 +11,7 @@ import Preview from "./Preview";
 import { GrFormPrevious } from "react-icons/gr";
 import { Interview } from "../../../entities/events/model/Interview";
 
-const CalendarPannel = ({
+const CalendarPanel = ({
   selectedDate,
   onDateChange,
   currentMonth,
@@ -24,7 +24,7 @@ const CalendarPannel = ({
   onMonthChange: (month: Date) => void;
   events: Record<string, Interview[]>; // Change this line
 }) => {
-  console.log("CalendarPannel events:", events);
+  console.log("CalendarPanel events:", events);
   return (
     <PopoverRoot closeOnInteractOutside={false} defaultOpen unstyled>
       <PopoverTrigger asChild position={"fixed"}>
@@ -64,4 +64,4 @@ const CalendarPannel = ({
     </PopoverRoot>
   );
 };
-export default CalendarPannel;
+export default CalendarPanel;

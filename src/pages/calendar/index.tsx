@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import CalendarPannel from "./ui/calendarPannel";
+import CalendarPanel from "./ui/calendarPanel";
 import CalendarForm from "./ui/calendarForm";
 import { Interview } from "../../entities/events/model/Interview";
 import {
@@ -117,7 +117,7 @@ const CalendarPage = () => {
 
   return (
     <Flex>
-      <CalendarPannel
+      <CalendarPanel
         selectedDate={selectedDate}
         onDateChange={handleDateClick}
         currentMonth={currentMonth}

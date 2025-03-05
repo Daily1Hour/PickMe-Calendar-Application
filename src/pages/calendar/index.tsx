@@ -10,25 +10,26 @@ import {
   getInterview,
   updateInterview,
 } from "./api/calendarApi";
+import { useQuery } from "@tanstack/react-query";
 
 const CalendarPage = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<Record<string, Interview[]>>({});
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const fetchedEvents = await getCalendar();
-        setEvents(fetchedEvents);
-        console.log("events:", fetchedEvents);
-      } catch (error) {
-        console.error("불러오기 실패:", error);
-      }
-    };
+  const date = currentMonth.toLocaleDateString("sv-SE").slice(0, 7);
+  const { data: fetchedEvents } = useQuery({
+    queryKey: ["calendar", date],
+    queryFn: () => getCalendar(date),
+    staleTime: 1000 * 60 * 60,
+  });
 
-    fetchEvents();
-  }, []);
+  useEffect(() => {
+    if (fetchedEvents) {
+      setEvents(fetchedEvents);
+      console.log("events:", fetchedEvents);
+    }
+  }, [fetchedEvents, setEvents]);
 
   const handleDateClick = async (date: Date | null) => {
     if (!date) return;

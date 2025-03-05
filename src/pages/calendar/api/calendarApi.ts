@@ -32,8 +32,8 @@ export const getInterview = async (interviewDetailId: string): Promise<Interview
     return DtoToInterview(response.data);
 }
 
-export const getCalendar = async (): Promise<Record<string, Interview[]>> => {
-    const response = await client.get<GetCalendarDTO>("/interviews");
+export const getCalendar = async (date: string): Promise<Record<string, Interview[]>> => {
+    const response = await client.get<GetCalendarDTO>("/interviews?yearMonth=" + date);
     return DtoToCalendarEvents(response.data);
 };
 export const createInterview = async (data: Interview): Promise<{ interviewRecordId: string }> => {

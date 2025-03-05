@@ -1,18 +1,20 @@
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
+import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
 import { Interview } from "../../../entities/events/model/Interview";
 
 export const StyledCalendar = styled(Calendar)`
   &.react-calendar-custom {
     border: 1px solid #ccc;
-    width: 50%;
     box-shadow: 0px 10px 20px 0px #0000000d;
+    width: 70%;
+    max-width: 50vw;
+    margin: 0 20px;
 
     .react-calendar__navigation {
       background: white;
-      height: 90px;
       border-radius: 20px 20px 0 0;
+      padding: 50px;
       span {
         font-size: 24px;
         font-weight: 600;
@@ -21,8 +23,7 @@ export const StyledCalendar = styled(Calendar)`
     }
 
     .react-calendar__navigation button {
-      border: none;
-      background: none;
+      font-size: 24px;
       font-weight: 700;
     }
 
@@ -41,7 +42,6 @@ export const StyledCalendar = styled(Calendar)`
       text-align: center;
       transition: background-color 0.3s ease;
       height: 100px;
-      width: 50px;
 
       &:hover {
         background-color: rgba(0, 154, 110, 0.5);

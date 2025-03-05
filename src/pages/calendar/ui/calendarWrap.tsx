@@ -1,5 +1,5 @@
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
+import "react-calendar/dist/Calendar.css";
 import { Box } from "@chakra-ui/react";
 import styled from "styled-components";
 import { Interview } from "../../../entities/events/model/Interview";
@@ -23,6 +23,15 @@ export const StyledCalendar = styled(Calendar)`
       background: grey !important;
     }
 
+    .react-calendar__tile--now {
+      background: none;
+      border: solid 1px rgba(0, 154, 110, 0.5) !important;
+    }
+
+    .react-calendar__tile--range {
+      background: rgba(0, 154, 110, 0.5) !important;
+    }
+
     .highlight-tile {
       background-color: #90ee90 !important;
       border-radius: 50%;
@@ -37,7 +46,7 @@ type CalendarWrapperProps = {
   onDateChange: (date: Date | null) => void;
   currentMonth: Date;
   onMonthChange: (month: Date) => void;
-  events: Record<string, Interview[]>; // 일정 데이터 추가
+  events: Record<string, Interview[]>;
 };
 
 const CalendarWrapper = ({
@@ -47,9 +56,8 @@ const CalendarWrapper = ({
   onMonthChange,
   events,
 }: CalendarWrapperProps) => {
-  // 특정 날짜에 일정이 있는지 확인하는 함수
   const dateHasEvent = (date: Date) => {
-    const dateKey = date.toDateString();
+    const dateKey = date.toLocaleDateString("sv-SE");
     return events[dateKey]?.length > 0;
   };
 
@@ -67,7 +75,7 @@ const CalendarWrapper = ({
         }}
         onActiveStartDateChange={({ activeStartDate }) => {
           if (activeStartDate) {
-            onMonthChange(activeStartDate); // 월 변경 핸들러 호출
+            onMonthChange(activeStartDate);
           }
         }}
         value={selectedDate}
@@ -80,7 +88,7 @@ const CalendarWrapper = ({
         prev2Label={null}
         next2Label={null}
         showNeighboringMonth={false}
-        activeStartDate={currentMonth} // 현재 월 상태와 동기화
+        activeStartDate={currentMonth}
       />
     </Box>
   );

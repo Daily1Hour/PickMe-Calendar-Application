@@ -1,7 +1,12 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import {
+  selectedDateAtom,
+  currentMonthAtom,
+  eventsAtom,
+} from "../../atom/writeAtom";
 
 export const StyledCalendar = styled(Calendar)`
   &.react-calendar-custom {
@@ -66,21 +71,11 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-type CalendarWrapperProps = {
-  selectedDate: Date | null;
-  onDateChange: (date: Date | null) => void;
-  currentMonth: Date;
-  onMonthChange: (month: Date) => void;
-  events: Record<string, Interview[]>;
-};
+const DetailCalendar = () => {
+  const [selectedDate, setSelectedDate] = useAtom(selectedDateAtom);
+  const [currentMonth, setCurrentMonth] = useAtom(currentMonthAtom);
+  const [events] = useAtom(eventsAtom);
 
-const DetailCalendar = ({
-  selectedDate,
-  onDateChange,
-  currentMonth,
-  onMonthChange,
-  events,
-}: CalendarWrapperProps) => {
   const dateHasEvent = (date: Date) => {
     const dateKey = date.toLocaleDateString("sv-SE");
     return events[dateKey]?.length > 0;
@@ -92,16 +87,16 @@ const DetailCalendar = ({
     <StyledCalendar
       onChange={(value) => {
         if (value instanceof Date) {
-          onDateChange(value);
+          setSelectedDate(value);
         } else if (Array.isArray(value)) {
-          onDateChange(value[0]);
+          setSelectedDate(value[0]);
         } else {
-          onDateChange(null);
+          setSelectedDate(null);
         }
       }}
       onActiveStartDateChange={({ activeStartDate }) => {
         if (activeStartDate) {
-          onMonthChange(activeStartDate);
+          setCurrentMonth(activeStartDate);
         }
       }}
       value={selectedDate}

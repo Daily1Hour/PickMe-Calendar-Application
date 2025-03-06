@@ -6,12 +6,12 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-  <QueryClientProvider client={queryClient}>
-    <ChakraProvider>
-      <CalendarPage />
-    </ChakraProvider>
-  </QueryClientProvider>
-  )
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <CalendarPage />
+      </ChakraProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

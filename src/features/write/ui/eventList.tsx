@@ -2,30 +2,38 @@ import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import { GetInterviewDetailDTO } from "../api/calendarDTOList";
 import EventInputField from "./eventInputField";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import { eventsAtom, selectedDateAtom } from "../../atom/writeAtom";
 
 type EventListProps = {
-  events: Interview[];
   onDelete: (index: number) => void;
   onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
 };
 
-const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editEvent, setEditEvent] = useState<GetInterviewDetailDTO | null>(
-    null
+const EventList = ({ onDelete, onUpdate }: EventListProps) => {
+  const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+  const [editEvent, setEditEvent] = useState<GetInterviewDetailDTO | undefined>(
+    undefined
   );
+
+  const [events] = useAtom(eventsAtom);
+  const [selectedDate] = useAtom(selectedDateAtom);
+
+  const dateKey = selectedDate
+    ? selectedDate.toLocaleDateString("sv-SE")
+    : undefined;
+  const eventList = dateKey ? events[dateKey] ?? [] : [];
 
   const handleEditClick = (index: number) => {
     setEditIndex(index);
-    setEditEvent(events[index]);
+    setEditEvent(eventList[index]);
   };
 
   const handleSaveClick = async () => {
-    if (editIndex !== null && editEvent) {
+    if (editIndex !== undefined && editEvent) {
       onUpdate(editIndex, editEvent);
-      setEditIndex(null);
-      setEditEvent(null);
+      setEditIndex(undefined);
+      setEditEvent(undefined);
     }
   };
 
@@ -53,13 +61,13 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
     });
   };
 
-  if (events.length === 0) {
+  if (eventList.length === 0) {
     return <Text>일정이 없습니다.</Text>;
   }
 
   return (
     <Box mt={4}>
-      {events.map((event, index) => (
+      {eventList.map((event, index) => (
         <Box key={index} mt={4} p={2} borderWidth="1px" borderRadius="md">
           {editIndex === index ? (
             <Flex direction="column" gap={2}>
@@ -110,7 +118,7 @@ const EventList = ({ events, onDelete, onUpdate }: EventListProps) => {
                 <Button
                   background="none"
                   color="black"
-                  onClick={() => setEditIndex(null)}
+                  onClick={() => setEditIndex(undefined)}
                 >
                   취소
                 </Button>

@@ -1,13 +1,17 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
 import { GrStatusGoodSmall } from "react-icons/gr";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import { eventsAtom, selectedDateAtom } from "../../atom/writeAtom";
 
-type PreviewProps = {
-  events: Interview[];
-  selectedDate: Date | null;
-};
+const Preview = () => {
+  const [selectedDate] = useAtom(selectedDateAtom);
+  const [events] = useAtom(eventsAtom);
 
-const Preview = ({ events, selectedDate }: PreviewProps) => {
+  const dateKey = selectedDate
+    ? selectedDate.toLocaleDateString("sv-SE")
+    : undefined;
+  const eventList = dateKey ? events[dateKey] ?? [] : [];
+
   console.log("Preview events:", events);
   return (
     <Box mt={6} w="20vw">
@@ -17,7 +21,7 @@ const Preview = ({ events, selectedDate }: PreviewProps) => {
           : "날짜를 선택해주세요."}
         의 일정:
       </Text>
-      {events.map((event, index) => (
+      {eventList.map((event, index) => (
         <Box
           key={index}
           p={4}

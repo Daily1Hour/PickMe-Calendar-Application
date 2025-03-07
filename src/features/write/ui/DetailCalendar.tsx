@@ -1,18 +1,25 @@
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
+import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import {
+  selectedDateAtom,
+  currentMonthAtom,
+  eventsAtom,
+} from "../../atom/writeAtom";
 
 export const StyledCalendar = styled(Calendar)`
   &.react-calendar-custom {
     border: 1px solid #ccc;
-    width: 50%;
     box-shadow: 0px 10px 20px 0px #0000000d;
+    width: 70%;
+    max-width: 50vw;
+    margin: 0 20px;
 
     .react-calendar__navigation {
       background: white;
-      height: 90px;
       border-radius: 20px 20px 0 0;
+      padding: 50px;
       span {
         font-size: 24px;
         font-weight: 600;
@@ -21,8 +28,7 @@ export const StyledCalendar = styled(Calendar)`
     }
 
     .react-calendar__navigation button {
-      border: none;
-      background: none;
+      font-size: 24px;
       font-weight: 700;
     }
 
@@ -41,7 +47,6 @@ export const StyledCalendar = styled(Calendar)`
       text-align: center;
       transition: background-color 0.3s ease;
       height: 100px;
-      width: 50px;
 
       &:hover {
         background-color: rgba(0, 154, 110, 0.5);
@@ -66,21 +71,11 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-type CalendarWrapperProps = {
-  selectedDate: Date | null;
-  onDateChange: (date: Date | null) => void;
-  currentMonth: Date;
-  onMonthChange: (month: Date) => void;
-  events: Record<string, Interview[]>;
-};
+const DetailCalendar = () => {
+  const [selectedDate, setSelectedDate] = useAtom(selectedDateAtom);
+  const [currentMonth, setCurrentMonth] = useAtom(currentMonthAtom);
+  const [events] = useAtom(eventsAtom);
 
-const DetailCalendar = ({
-  selectedDate,
-  onDateChange,
-  currentMonth,
-  onMonthChange,
-  events,
-}: CalendarWrapperProps) => {
   const dateHasEvent = (date: Date) => {
     const dateKey = date.toLocaleDateString("sv-SE");
     return events[dateKey]?.length > 0;
@@ -92,16 +87,16 @@ const DetailCalendar = ({
     <StyledCalendar
       onChange={(value) => {
         if (value instanceof Date) {
-          onDateChange(value);
+          setSelectedDate(value);
         } else if (Array.isArray(value)) {
-          onDateChange(value[0]);
+          setSelectedDate(value[0]);
         } else {
-          onDateChange(null);
+          setSelectedDate(null);
         }
       }}
       onActiveStartDateChange={({ activeStartDate }) => {
         if (activeStartDate) {
-          onMonthChange(activeStartDate);
+          setCurrentMonth(activeStartDate);
         }
       }}
       value={selectedDate}

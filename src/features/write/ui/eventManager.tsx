@@ -1,28 +1,26 @@
 import { Box, Text } from "@chakra-ui/react";
 import EventList from "./eventList";
 import { GetInterviewDetailDTO } from "../api/calendarDTOList";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import { selectedDateAtom } from "../../atom/writeAtom";
 
 type EventManagerProps = {
-  events: Interview[];
   onDelete: (index: number) => void;
   onUpdate: (index: number, updatedEvent: GetInterviewDetailDTO) => void;
-  selectedDate: Date | null;
 };
 
-const EventManager = ({
-  events,
-  onDelete,
-  onUpdate,
-  selectedDate,
-}: EventManagerProps) => {
+const EventManager = ({ onDelete, onUpdate }: EventManagerProps) => {
+  const selectedDate = useAtom(selectedDateAtom)[0];
+
   return (
     <Box mt={6} width="700px">
       <Text fontSize="lg">
-        {selectedDate ? selectedDate.toDateString() : "날짜를 선택해주세요!"}의
-        일정:
+        {selectedDate
+          ? selectedDate.toLocaleDateString("sv-SE")
+          : "날짜를 선택해주세요!"}
+        의 일정:
       </Text>
-      <EventList events={events} onDelete={onDelete} onUpdate={onUpdate} />
+      <EventList onDelete={onDelete} onUpdate={onUpdate} />
     </Box>
   );
 };

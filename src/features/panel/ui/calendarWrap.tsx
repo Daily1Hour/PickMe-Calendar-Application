@@ -1,8 +1,13 @@
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // 기본 스타일 가져오기
+import "react-calendar/dist/Calendar.css";
 import { Box } from "@chakra-ui/react";
 import styled from "styled-components";
-import { Interview } from "../../../entities/events/model/Interview";
+import { useAtom } from "jotai";
+import {
+  currentMonthAtom,
+  eventsAtom,
+  selectedDateAtom,
+} from "../../atom/writeAtom";
 
 export const StyledCalendar = styled(Calendar)`
   &.react-calendar-custom {
@@ -23,6 +28,15 @@ export const StyledCalendar = styled(Calendar)`
       background: grey !important;
     }
 
+    .react-calendar__tile--now {
+      background: none;
+      border: solid 1px rgba(0, 154, 110, 0.5) !important;
+    }
+
+    .react-calendar__tile--range {
+      background: rgba(0, 154, 110, 0.5) !important;
+    }
+
     .highlight-tile {
       background-color: #90ee90 !important;
       border-radius: 50%;
@@ -32,24 +46,13 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-type CalendarWrapperProps = {
-  selectedDate: Date | null;
-  onDateChange: (date: Date | null) => void;
-  currentMonth: Date;
-  onMonthChange: (month: Date) => void;
-  events: Record<string, Interview[]>; // 일정 데이터 추가
-};
+const CalendarWrapper = () => {
+  const [selectedDate, setSelectedDate] = useAtom(selectedDateAtom);
+  const [currentMonth, setCurrentMonth] = useAtom(currentMonthAtom);
+  const [events] = useAtom(eventsAtom);
 
-const CalendarWrapper = ({
-  selectedDate,
-  onDateChange,
-  currentMonth,
-  onMonthChange,
-  events,
-}: CalendarWrapperProps) => {
-  // 특정 날짜에 일정이 있는지 확인하는 함수
   const dateHasEvent = (date: Date) => {
-    const dateKey = date.toDateString();
+    const dateKey = date.toLocaleDateString("sv-SE");
     return events[dateKey]?.length > 0;
   };
 
@@ -58,16 +61,16 @@ const CalendarWrapper = ({
       <StyledCalendar
         onChange={(value) => {
           if (value instanceof Date) {
-            onDateChange(value);
+            setSelectedDate(value);
           } else if (Array.isArray(value)) {
-            onDateChange(value[0]);
+            setSelectedDate(value[0]);
           } else {
-            onDateChange(null);
+            setSelectedDate(null);
           }
         }}
         onActiveStartDateChange={({ activeStartDate }) => {
           if (activeStartDate) {
-            onMonthChange(activeStartDate); // 월 변경 핸들러 호출
+            setCurrentMonth(activeStartDate);
           }
         }}
         value={selectedDate}
@@ -80,7 +83,7 @@ const CalendarWrapper = ({
         prev2Label={null}
         next2Label={null}
         showNeighboringMonth={false}
-        activeStartDate={currentMonth} // 현재 월 상태와 동기화
+        activeStartDate={currentMonth}
       />
     </Box>
   );
